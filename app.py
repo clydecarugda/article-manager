@@ -16,4 +16,4 @@ app.config['mongo'] = mongo_db
 app.register_blueprint(articles_bp)
 
 if __name__ == '__main__':
-  app.run(debug=True)
+  app.run()
