@@ -16,4 +16,5 @@ app.config['mongo'] = mongo_db
 app.register_blueprint(articles_bp)
 
 if __name__ == '__main__':
-  app.run()
+  port = int(Config.PORT)
+  app.run(host='0.0.0.0', port=port)
