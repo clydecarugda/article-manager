@@ -8,15 +8,15 @@ from config import Config
 app = Celery('celery_app',
              broker=Config.REDIS_URI)
 
-db_uri = Config.MONGO_URI
-client = MongoClient(db_uri)
-db = client.get_database()
-
 logger = get_task_logger(__name__)
 
 @app.task
 def process_source_task(article_id, source_name, source_url, source_text, parsed):
   logger.info(f'Updating Source: {source_name} in {article_id}')
+  
+  db_uri = Config.MONGO_URI
+  client = MongoClient(db_uri)
+  db = client.get_database()
   
   update_query = {
     '_id': ObjectId(article_id),
