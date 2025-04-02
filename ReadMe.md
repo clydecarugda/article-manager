@@ -47,7 +47,7 @@ REST API endpoints guide for the article manager
     }
     ```
 
-### 2. Insert Article Source
+### 2. Insert Article Source & Trigger Celery Background Task
 - **Method:** `PATCH`  
 - **URL:** `/articles/<string:article_id>/sources`
 - **Path Parameter:**
@@ -71,7 +71,7 @@ REST API endpoints guide for the article manager
     }
     ```
 
-    > **Note:** The `parsed` field is automatically set to `false` upon source creation.
+    > **Note:** The `parsed` field is automatically set to `false` upon source creation. After the source is created, a **Celery worker** will be triggered to update the `parsed` field from `false` to `true`.
 
   - **404 Not Found** - Returned if the given `article_id` is not found in the database.
 
