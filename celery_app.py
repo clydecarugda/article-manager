@@ -2,12 +2,13 @@ from celery import Celery
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-app = Celery('celery_app',
-             broker='redis://localhost:6379/0')
+from config import Config
 
-db_uri = 'mongodb://localhost:27017/'
+app = Celery('celery_app',
+             broker=Config.REDIS_URI)
+
+db_uri = Config.MONGO_URI
 client = MongoClient(db_uri)
-database = client.get_database('test')
 
 @app.task
 def process_source_task(article_id, source_name, source_url, parsed):
@@ -23,6 +24,6 @@ def process_source_task(article_id, source_name, source_url, parsed):
     }
   }
   
-  result = database.articles.update_one(update_query, update_data)
+  result = client.articles.update_one(update_query, update_data)
   
   print(result)
