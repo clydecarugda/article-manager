@@ -48,7 +48,7 @@ def insert_article_sources(article_id):
     parsed = False # Defaults to false
     
     if not name or not url or not text:
-      return jsonify({'error': "The 'Name', 'URL', and text source fields are required!"}), 400
+      return jsonify({'error': "The 'Name', 'URL', and 'Text' source fields are required!"}), 400
     
     source = {
       'name': name,
@@ -82,7 +82,7 @@ def insert_article_sources(article_id):
 
   except Exception as e:
     current_app.logger.error(e)
-    return jsonify({'error', 'An unexpected error occured while creating the article source'}), 500
+    return jsonify({'error', 'An unexpected error occurred while creating the article source'}), 500
   
 @articles_bp.route('/articles', methods=['GET'])
 def get_articles():
@@ -95,7 +95,7 @@ def get_articles():
     
   except Exception as e:
     current_app.logger.error(e)
-    return jsonify({'error': 'An error occured while fetching the data!'}), 500
+    return jsonify({'error': 'An error occurred while fetching the data!'}), 500
   
 @articles_bp.route('/articles/<string:article_id>', methods=['GET'])
 def get_article(article_id):
@@ -111,7 +111,7 @@ def get_article(article_id):
     
   except Exception as e:
     current_app.logger.error(e)
-    return jsonify({'error': 'An error occured while fetching the data!'}), 500
+    return jsonify({'error': 'An error occurred while fetching the data!'}), 500
   
 @articles_bp.route('/articles/<string:article_id>', methods=['PATCH'])
 def update_article(article_id):
@@ -126,32 +126,28 @@ def update_article(article_id):
     title = data.get('title')
     description = data.get('description')
     tags = data.get('tags')
-    sources = data.get('sources')
-    parsed = data.get('parsed')
     
-    if not title or not sources:
-      return jsonify({'error': "The 'Title' and 'Sources' field are required!"}), 400
+    if not title or not description:
+      return jsonify({'error': "The 'Title' and 'Description' fields are required!"}), 400
     
     update_data = {
       '$set': {
         'title': title,
         'description': description,
-        'tags': tags,
-        'sources': sources,
-        'parsed': parsed
+        'tags': tags
       }
     }
     
     result = mongo_db.db.articles.update_one(query_selector, update_data)
     
     if result.matched_count == 0:
-      return jsonify({'error': 'Failed to update article'}), 404
+      return jsonify({'error': 'Failed to update article. Article not found.'}), 404
     
     return jsonify({'message': 'Article updated successfully!'}), 200
     
   except Exception as e:
     current_app.logger.error(e)
-    return jsonify({'error': 'An error occured while fetching the data!'}), 500
+    return jsonify({'error': 'An error occurred while updating the data!'}), 500
   
 @articles_bp.route('/articles/<string:article_id>', methods=['DELETE'])
 def delete_article(article_id):
@@ -161,10 +157,10 @@ def delete_article(article_id):
     result = mongo_db.db.articles.delete_one({'_id': ObjectId(article_id)})
     
     if result.deleted_count == 0:
-      return jsonify({'error': 'Invalid Article. No data deleted!'}), 404
+      return jsonify({'error': 'Invalid Article ID. No data deleted!'}), 404
     
     return jsonify({'message': 'Article Deleted'}), 200
   
   except Exception as e:
     current_app.logger.error(e)
-    return jsonify({'error': 'An unexpected error occured.'}), 500
+    return jsonify({'error': 'An unexpected error occurred.'}), 500
