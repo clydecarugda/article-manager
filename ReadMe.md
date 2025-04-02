@@ -182,7 +182,7 @@ REST API endpoints guide for the article manager
     }
     ```
 
-### 4. Delete Article
+### 5. Delete Article
 - **Method:** `DELETE`  
 - **URL:** `/articles/<string:article_id>`
 - **Path Parameter:**
@@ -216,7 +216,7 @@ REST API endpoints guide for the article manager
     }
     ```
 
-### 5. Update Article
+### 6. Update Article
 - **Method:** `PATCH`  
 - **URL:** `/articles/<string:article_id>`
 - **Path Parameter:**
