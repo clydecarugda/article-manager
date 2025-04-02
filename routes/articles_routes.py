@@ -75,7 +75,7 @@ def insert_article_sources(article_id):
       return jsonify({'error': f"Article id '{ObjectId(article_id)}' does not exist!"}), 404
     
     # Trigger Celery to run update task in the background
-    celery_task = process_source_task.delay(article_id, name, url, True)
+    celery_task = process_source_task.delay(article_id, name, url, text, True)
     # celery_task = process_source_task.apply_async((article_id, name, url, True), countdown=10)
     
     return jsonify(source), 201
